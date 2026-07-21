@@ -33,7 +33,29 @@ To develop a C program using the static storage class in a function with a param
 ### Step 8:
   Stop
 # Program:
+```
+#include <stdio.h>
+
+void displayCount(int num) {
+    static int count = 0;
+    count++;
+    
+    printf("Function called %d time(s) with parameter: %d\n", count, num);
+}
+
+int main() {
+    displayCount(10);
+    displayCount(20);
+    displayCount(30);
+    displayCount(40);
+    
+    return 0;
+}
+```
 # Output:
+<img width="633" height="222" alt="624412796-b1d03896-4faa-4224-b645-ef27b5e20434" src="https://github.com/user-attachments/assets/e9e100f3-ce87-4d96-9d1a-df819e4f2f7f" />
+
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -79,7 +101,80 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 11:
   Stop
 # Program:
+```
+#include <stdio.h>
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+float divide(int a, int b) {
+    if(b != 0) {
+        return (float)a / b;
+    } else {
+        printf("Error: Division by zero!\n");
+        return 0;
+    }
+}
+
+int main() {
+    int num1, num2, choice;
+    int (*intFunc)(int, int);
+    float (*floatFunc)(int, int);
+    
+    printf("Enter first number: ");
+    scanf("%d", &num1);
+    printf("Enter second number: ");
+    scanf("%d", &num2);
+    
+    printf("\nSelect operation:\n");
+    printf("1. Addition\n");
+    printf("2. Subtraction\n");
+    printf("3. Multiplication\n");
+    printf("4. Division\n");
+    printf("Enter choice (1-4): ");
+    scanf("%d", &choice);
+    
+    switch(choice) {
+        case 1:
+            intFunc = add;
+            printf("Result: %d + %d = %d\n", num1, num2, intFunc(num1, num2));
+            break;
+            
+        case 2:
+            intFunc = subtract;
+            printf("Result: %d - %d = %d\n", num1, num2, intFunc(num1, num2));
+            break;
+            
+        case 3:
+            intFunc = multiply;
+            printf("Result: %d * %d = %d\n", num1, num2, intFunc(num1, num2));
+            break;
+            
+        case 4:
+            floatFunc = divide;
+            printf("Result: %d / %d = %.2f\n", num1, num2, floatFunc(num1, num2));
+            break;
+            
+        default:
+            printf("Invalid choice!\n");
+    }
+    
+    return 0;
+}
+```
 # Output:
+<img width="401" height="389" alt="624413011-ccd07294-6f1d-43ea-80a6-1e097d4309e0" src="https://github.com/user-attachments/assets/9dea83a6-fa28-4ac2-ad71-c5d0bfccea90" />
+
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -123,7 +218,60 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 10:
   Stop
 # Program:
+```
+
+#include <stdio.h>
+
+struct Employee {
+    int empno;
+    char name[50];
+    float salary;
+};
+
+int main() {
+    int n;
+    
+    printf("Enter number of employees: ");
+    scanf("%d", &n);
+    
+    struct Employee emp[n];
+    
+    for(int i = 0; i < n; i++) {
+        printf("\nEmployee %d:\n", i + 1);
+        printf("Number: ");
+        scanf("%d", &emp[i].empno);
+        printf("Name: ");
+        scanf("%s", emp[i].name);
+        printf("Salary: ");
+        scanf("%f", &emp[i].salary);
+    }
+    
+    float max = emp[0].salary;
+    
+    for(int i = 1; i < n; i++) {
+        if(emp[i].salary > max) {
+            max = emp[i].salary;
+        }
+    }
+    
+    printf("\nHighest Salary: %.2f\n", max);
+    printf("Employees with highest salary:\n");
+    
+    for(int i = 0; i < n; i++) {
+        if(emp[i].salary == max) {
+            printf("%d %s %.2f\n", emp[i].empno, emp[i].name, emp[i].salary);
+        }
+    }
+    
+    return 0;
+}
+
+```
 # Output:
+
+<img width="397" height="577" alt="624413258-2324b8f0-64f7-4831-9721-99d1e7efd45b" src="https://github.com/user-attachments/assets/78a49508-7fc5-40c6-bd6b-6e1abc695f10" />
+
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -166,7 +314,49 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 9:
   Stop
 # Program:
+```
+#include <stdio.h>
+
+struct date {
+    int c_date, c_month, c_year;
+    int b_date, b_month, b_year;
+    int cal_date, cal_month, cal_year;
+};
+
+void findAge(struct date *p) {
+    int month[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+    if (p->b_date > p->c_date) {
+        p->c_date += month[p->c_month - 2];
+        p->c_month -= 1;
+    }
+
+    if (p->b_month > p->c_month) {
+        p->c_year -= 1;
+        p->c_month += 12;
+    }
+
+    p->cal_date = p->c_date - p->b_date;
+    p->cal_month = p->c_month - p->b_month;
+    p->cal_year = p->c_year - p->b_year;
+}
+
+int main() {
+    struct date d = {15, 2, 2025, 20, 10, 2000};
+
+    findAge(&d);
+
+    printf("Age: %d years, %d months, %d days\n",
+           d.cal_year, d.cal_month, d.cal_date);
+
+    return 0;
+}
+```
 # Output:
+
+<img width="585" height="157" alt="624413447-0cd22c04-44eb-4b58-b1e1-4df7f6404f4e" src="https://github.com/user-attachments/assets/91f779d3-7428-4008-816e-41bda8be4ee6" />
+
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -202,7 +392,34 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 10:
   Stop
 # Program:
+```
+#include <stdio.h>
+
+union abc {
+    int a;
+    char b;
+};
+
+int main() {
+    union abc var;
+    union abc *ptr;
+
+    ptr = &var;
+
+    var.a = 90;
+
+    printf("Integer value = %d\n", ptr->a);
+    printf("Character value = %c\n", ptr->b);
+
+    return 0;
+}
+
+```
 # Output:
+
+<img width="570" height="212" alt="624413700-05ef9321-0140-49bc-9d6a-6fc94c55de7b" src="https://github.com/user-attachments/assets/6fb498c5-fa28-46d5-a789-fbe65348bec5" />
+
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
